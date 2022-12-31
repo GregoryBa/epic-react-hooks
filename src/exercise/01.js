@@ -3,7 +3,8 @@
 
 import * as React from 'react'
 
-function Greeting({initialName}) {
+function Greeting({initialName = ''}) {
+  // = '' initalizes default value of the string
   const [name, setName] = React.useState(initialName)
   // create a state
   // '' = initial value of that state
