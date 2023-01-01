@@ -3,14 +3,25 @@
 
 import * as React from 'react'
 
-function Greeting({initialName = ''}) {
-  const [name, setName] = React.useState(
-    () => window.localStorage.getItem('name') ?? initialName,
+function useLocalStorateWithState(key, defaultValue) {
+  const [state, setState] = React.useState(
+    // lazy initialization, not running every single render.
+    // improves preformance
+    () => window.localStorage.getItem(key) || defaultValue,
   )
 
   React.useEffect(() => {
-    window.localStorage.setItem('name', name)
-  })
+    window.localStorage.setItem(key, state)
+    // [name] array dependency / dependency list
+    // improves preformance
+    // if the name changes, rerun this callback.
+  }, [key, state])
+
+  return [state, setState]
+}
+
+function Greeting({initialName = ''}) {
+  const [name, setName] = useLocalStorateWithState('name', initialName)
 
   function handleChange(event) {
     setName(event.target.value)
